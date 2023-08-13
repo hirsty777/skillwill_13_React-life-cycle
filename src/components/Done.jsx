@@ -1,8 +1,11 @@
-import { Component } from "react";
+import { PureComponent } from "react";
 
-class Done extends Component{
+// PureComponent prevents this component rendering when i change input values on parent component(addElelemnt)
+class Done extends PureComponent{
     render(){
         const {name, id, actionReturn, actionRemove} = this.props;
+        
+        console.log("done component")
         return(
             <div className="done-box">
                <div className="done">

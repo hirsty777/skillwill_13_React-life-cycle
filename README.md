@@ -1,5 +1,4 @@
-# Getting Started with Create React App
+# React life cycle
 
 
-### `To do list with state and class based components`
 

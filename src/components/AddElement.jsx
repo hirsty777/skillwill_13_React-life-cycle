@@ -8,13 +8,44 @@ class AddElement extends Component{
         inputValue:"",
         toDoList:[],
         doneList:[],
-        key:0
+        key:0,
+        status:false
     };
+    
+    //get random todo when component is mounted
+    componentDidMount(){
+        console.log("component mounted")
+        const randNum = Math.floor(Math.random()*10+1)
+        fetch(`https://jsonplaceholder.typicode.com/todos/${randNum}`)
+        .then(data => data.json())
+        .then(res => this.setState({
+            toDoList:[{id:this.state.key, name:res.title}],
+            key:this.state.key+1
+        }))
+    }
+    //if state status was changed fetch will be called from new
+    componentDidUpdate(prevProps, prevState, snapshot){
+        if(this.state.status !== prevState.status){
+            console.log("component updated")
+            const randNum = Math.floor(Math.random()*10+1)
+            fetch(`https://jsonplaceholder.typicode.com/todos/${randNum}`)
+            .then(data => data.json())
+            .then(res => this.setState({
+                toDoList:[...this.state.toDoList, {id:this.state.key, name:res.title}],
+                key:this.state.key+1
+            }))
+        }
+    }
+    //change state status it will cause component update
+    getRandomToDo  = () => {
+        this.setState((prevState) => {
+            return {status:!prevState.status}
+        })
+    }
     // change state.inputValue to value being entered in inputfield
     onChange = (e) => {
-        const value = e.target.value
         this.setState({
-            inputValue:value
+            inputValue: e.target.value
         })
     }
     //add entered text to state toDoList when add button is clicked
@@ -61,7 +92,8 @@ class AddElement extends Component{
         })
     };
 
-    render(){      
+    render(){   
+        console.log("Render log")   
         return(
             <div className="wrapper">
                 <div className="add-wrapper">
@@ -71,6 +103,7 @@ class AddElement extends Component{
                     <img src={addLogo} alt="logo" />
                     </button>
                 </form>
+                <button onClick={this.getRandomToDo} className="random-btn">Random</button>
                 </div>
                 <div className="flex-box">
                     <h3>To Do List</h3>
